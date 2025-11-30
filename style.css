@@ -1,16 +1,12 @@
 :root {
-            /* 日式極簡配色 (Japanese Minimalist Palette) */
-            --bg-color: #Fdfbf7;
-            /* 和紙白 */
+            /* 低調簡約配色 (藍、綠、大地色) */
+            --bg-color: #f4f1eb;            /* 柔和米色 (Soft Beige) */
             --card-bg: #ffffff;
-            --text-main: #2b2b2b;
-            /* 墨黑 */
-            --text-sub: #666666;
-            --accent: #5e6472;
-            /* 藍灰 */
-            --accent-hover: #4a4f5a;
-            --danger: #d9534f;
-            /* 茜色 */
+            --text-main: #34495e;          /* 石板藍 (Slate Blue) */
+            --text-sub: #7f8c8d;           /* 灰綠 (Grayish Cyan) */
+            --accent: #5D9C96;             /* 靜謐綠 (Muted Green) */
+            --accent-hover: #4E847F;
+            --danger: #a85c48;             /* 赤陶色 (Terracotta) */
             --border-radius: 12px;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         }
@@ -196,6 +192,8 @@
         .sub-name {
             font-size: 1.1rem;
             font-weight: 500;
+            overflow-wrap: break-word;
+            word-wrap: break-word; /* Legacy fallback */
         }
 
         .sub-price {
@@ -203,12 +201,17 @@
             font-weight: 700;
         }
 
-        .sub-cycle {
-            font-size: 0.8rem;
-            background: #f0f0f0;
-            padding: 2px 8px;
-            border-radius: 4px;
+        .subs-group {
+            margin-bottom: 40px;
+        }
+
+        .group-title {
+            font-size: 1.2rem;
+            font-weight: 300;
             color: var(--text-sub);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .sub-details {
@@ -254,21 +257,45 @@
 
         /* RWD */
         @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+        
+            h1 {
+                font-size: 1.8rem;
+            }
+        
             .dashboard {
                 grid-template-columns: 1fr;
             }
-
+            
+            .stats-value {
+                font-size: 1.5rem;
+            }
+        
+            .chart-container {
+                height: auto;
+                min-height: 250px;
+            }
+        
             .form-grid {
                 grid-template-columns: 1fr;
+                align-items: stretch;
+                gap: 20px;
             }
-
+        
             .stats-card {
                 flex-direction: row;
-                justify-content: space-between;
+                justify-content: space-around;
+                padding: 20px;
             }
-
+        
             .stats-item {
                 margin-bottom: 0;
-                margin-right: 20px;
+                margin-right: 10px;
+            }
+            
+            .stats-item:last-child {
+                margin-right: 0;
             }
         }

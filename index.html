@@ -4,7 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sub Manager | 訂閱管理</title>
+    <title>Subscription Zen | 訂閱管理</title>
+
+    <!-- PWA & Favicon -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <meta name="theme-color" content="#5e6472">
+
     <!-- 引入 Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- 引入 Google Fonts (日式黑體) -->
@@ -18,8 +25,8 @@
 
     <div class="container">
         <header>
-            <h1>訂閱管理</h1>
-            <p class="subtitle">Sub Manager - 掌控你的固定開銷</p>
+            <h1>サブスク管理</h1>
+            <p class="subtitle">Subscription Manager - 掌控你的固定開銷</p>
         </header>
 
         <!-- 儀表板：統計與圖表 -->
@@ -49,9 +56,8 @@
                         <option value="iCloud">iCloud</option>
                         <option value="Spotify">Spotify</option>
                         <option value="YouTube Premium">YouTube Premium</option>
-                        <option value="Microsoft 365">Microsoft 365</option>
                         <option value="Disney+">Disney+</option>
-                        <option value="Adobe Creative Cloud">Adobe Creative Cloud</option>
+                        <option value="巴哈姆特動畫瘋">巴哈姆特動畫瘋</option>
                         <option value="custom">其他 (自訂)</option>
                     </select>
                     <input type="text" id="name-custom" placeholder="請輸入服務名稱" style="display: none; margin-top: 10px;">
@@ -79,7 +85,7 @@
         </div>
 
         <!-- 卡片列表區 -->
-        <div class="subs-grid" id="subs-list">
+        <div id="subs-list">
             <!-- 卡片將由 JS 動態生成 -->
         </div>
     </div>

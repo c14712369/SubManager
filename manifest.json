@@ -1,0 +1,16 @@
+{
+  "name": "Subscription Zen",
+  "short_name": "SubZen",
+  "description": "一個簡潔的訂閱管理工具",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#Fdfbf7",
+  "theme_color": "#5e6472",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

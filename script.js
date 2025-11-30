@@ -127,63 +127,98 @@ function getDaysRemaining(dateString) {
 // 9. 渲染 UI
 function renderList() {
     listContainer.innerHTML = '';
-    
-    subscriptions.sort((a, b) => new Date(a.nextDate) - new Date(b.nextDate));
+
+    // 1. 將訂閱按週期分組
+    const groupedSubs = {
+        'monthly': [],
+        'quarterly': [],
+        'half-yearly': [],
+        'yearly': [],
+        'one-time': []
+    };
 
     subscriptions.forEach(sub => {
-        const daysLeft = getDaysRemaining(sub.nextDate);
-        const isUrgent = daysLeft <= 3 && daysLeft >= 0;
-        const isOverdue = daysLeft < 0;
-
-        let daysText = '';
-        if (sub.cycle === 'one-time') {
-            daysText = `付款日: ${sub.nextDate}`;
-        } else if (isOverdue) {
-            daysText = `已過期 ${Math.abs(daysLeft)} 天`;
-        } else if (daysLeft === 0) {
-            daysText = `就是今天！`;
-        } else {
-            daysText = `還有 ${daysLeft} 天`;
+        if (groupedSubs[sub.cycle]) {
+            groupedSubs[sub.cycle].push(sub);
         }
+    });
 
-        const cycleTextMap = {
-            'monthly': '月繳',
-            'quarterly': '季繳',
-            'yearly': '年繳',
-            'half-yearly': '半年繳',
-            'one-time': '單次付款'
-        };
-        
-        const borderColorMap = {
-            'monthly': '#8e44ad',
-            'quarterly': '#3498db',
-            'yearly': '#27ae60',
-            'half-yearly': '#2980b9',
-            'one-time': '#f39c12'
-        };
+    const cycleOrder = ['monthly', 'quarterly', 'half-yearly', 'yearly', 'one-time'];
+    const cycleTextMap = {
+        'monthly': '月繳',
+        'quarterly': '季繳',
+        'half-yearly': '半年繳',
+        'yearly': '年繳',
+        'one-time': '單次付款'
+    };
+    
+    // 2. 按照順序渲染每個分組
+    cycleOrder.forEach(cycle => {
+        const subsInGroup = groupedSubs[cycle];
+        if (subsInGroup.length === 0) return;
 
-        const card = document.createElement('div');
-        card.className = 'sub-card';
-        card.style.borderLeftColor = borderColorMap[sub.cycle] || '#7f8c8d';
-        card.innerHTML = `
-        <div class="sub-header">
-            <div>
+        // 排序組內的卡片
+        subsInGroup.sort((a, b) => new Date(a.nextDate) - new Date(b.nextDate));
+
+        // 創建分組容器和標題
+        const groupContainer = document.createElement('div');
+        groupContainer.className = 'subs-group';
+        groupContainer.innerHTML = `<h2 class="group-title">${cycleTextMap[cycle]} (${subsInGroup.length})</h2>`;
+
+        // 創建卡片網格
+        const grid = document.createElement('div');
+        grid.className = 'subs-grid';
+
+        // 3. 渲染卡片
+        subsInGroup.forEach(sub => {
+            const daysLeft = getDaysRemaining(sub.nextDate);
+            const isUrgent = daysLeft <= 3 && daysLeft >= 0;
+            const isOverdue = daysLeft < 0;
+
+            let daysText = '';
+            if (sub.cycle === 'one-time' && daysLeft < 0) {
+                 daysText = `已於 ${sub.nextDate} 付款`;
+            } else if (sub.cycle === 'one-time') {
+                daysText = `付款日: ${sub.nextDate}`;
+            } else if (isOverdue) {
+                daysText = `已過期 ${Math.abs(daysLeft)} 天`;
+            } else if (daysLeft === 0) {
+                daysText = `就是今天！`;
+            } else {
+                daysText = `還有 ${daysLeft} 天`;
+            }
+
+            const borderColorMap = {
+                'monthly': '#5b8bba',     // 柔和藍
+                'quarterly': '#63a87d',   // 鼠尾草綠
+                'half-yearly': '#48a8a2', // 青藍
+                'yearly': '#a89348',      // 枯木色
+                'one-time': '#c4b79c'     // 沙色
+            };
+
+            const card = document.createElement('div');
+            card.className = 'sub-card';
+            card.style.borderLeftColor = borderColorMap[sub.cycle] || '#7f8c8d';
+            card.innerHTML = `
+            <div class="sub-header">
                 <div class="sub-name">${sub.name}</div>
-                <span class="sub-cycle">${cycleTextMap[sub.cycle] || sub.cycle}</span>
+                <div class="sub-price">$${sub.price}</div>
             </div>
-            <div class="sub-price">${sub.price}</div>
-        </div>
-        <div class="sub-details">
-            <div class="countdown ${isUrgent || isOverdue ? 'urgent' : ''}">
-                ${daysText}
+            <div class="sub-details">
+                <div class="countdown ${isUrgent || isOverdue ? 'urgent' : ''}">
+                    ${daysText}
+                </div>
+                <div class="card-actions">
+                    <button class="edit-btn" onclick="startEdit(${sub.id})">編輯</button>
+                    <button class="delete-btn" onclick="deleteSubscription(${sub.id})">移除</button>
+                </div>
             </div>
-            <div class="card-actions">
-                <button class="edit-btn" onclick="startEdit(${sub.id})">編輯</button>
-                <button class="delete-btn" onclick="deleteSubscription(${sub.id})">移除</button>
-            </div>
-        </div>
-    `;
-        listContainer.appendChild(card);
+        `;
+            grid.appendChild(card);
+        });
+
+        groupContainer.appendChild(grid);
+        listContainer.appendChild(groupContainer);
     });
 }
 
@@ -245,7 +280,7 @@ function updateChart(labels, data) {
             datasets: [{
                 data: data,
                 backgroundColor: [
-                    '#7b8fa1', '#cfb997', '#564e58', '#fad0c4', '#a2d5c6', '#8590aa'
+                    '#5b8bba', '#63a87d', '#a89348', '#48a8a2', '#7f8c8d', '#a85c48'
                 ],
                 borderWidth: 0,
                 hoverOffset: 4
@@ -258,6 +293,7 @@ function updateChart(labels, data) {
                 legend: {
                     position: 'right',
                     labels: {
+                        color: '#34495e', // Use main text color for legend
                         font: { family: "'Noto Sans JP', sans-serif" },
                         usePointStyle: true
                     }
