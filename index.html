@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sub Manager | 訂閱管理</title>
+    <!-- 引入 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入 Google Fonts (日式黑體) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- 引入外部 CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>訂閱管理</h1>
+            <p class="subtitle">Sub Manager - 掌控你的固定開銷</p>
+        </header>
+
+        <!-- 儀表板：統計與圖表 -->
+        <div class="dashboard">
+            <div class="stats-card">
+                <div class="stats-item">
+                    <div class="stats-label">每月平均支出</div>
+                    <div class="stats-value" id="monthly-total">0 <span>TWD</span></div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-label">年度總預估</div>
+                    <div class="stats-value" id="yearly-total">0 <span>TWD</span></div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 輸入區 -->
+        <div class="input-section">
+            <form id="sub-form" class="form-grid">
+                <div class="form-group">
+                    <label>服務名稱</label>
+                    <select id="name-select">
+                        <option value="Netflix">Netflix</option>
+                        <option value="iCloud">iCloud</option>
+                        <option value="Spotify">Spotify</option>
+                        <option value="YouTube Premium">YouTube Premium</option>
+                        <option value="Microsoft 365">Microsoft 365</option>
+                        <option value="Disney+">Disney+</option>
+                        <option value="Adobe Creative Cloud">Adobe Creative Cloud</option>
+                        <option value="custom">其他 (自訂)</option>
+                    </select>
+                    <input type="text" id="name-custom" placeholder="請輸入服務名稱" style="display: none; margin-top: 10px;">
+                </div>
+                <div class="form-group">
+                    <label>金額 (TWD)</label>
+                    <input type="number" id="price" placeholder="270" required>
+                </div>
+                <div class="form-group">
+                    <label>扣款週期</label>
+                    <select id="cycle">
+                        <option value="monthly">每月</option>
+                        <option value="quarterly">每季</option>
+                        <option value="half-yearly">半年</option>
+                        <option value="yearly">每年</option>
+                        <option value="one-time">單次</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>下次扣款日 / 付款日</label>
+                    <input type="date" id="nextDate" required>
+                </div>
+                <button type="submit" class="add-btn">新增</button>
+            </form>
+        </div>
+
+        <!-- 卡片列表區 -->
+        <div class="subs-grid" id="subs-list">
+            <!-- 卡片將由 JS 動態生成 -->
+        </div>
+    </div>
+
+    <!-- 引入外部 JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
